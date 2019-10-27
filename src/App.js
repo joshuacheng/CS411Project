@@ -11,9 +11,9 @@ function App() {
         <h1>
           AdmitMe
         </h1>
-        <Button>
+        {/* <Button>
           get stuff
-        </Button>
+        </Button> */}
       </header>
 
         <SubmitForm />
