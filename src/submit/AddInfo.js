@@ -6,6 +6,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import { withStyles } from "@material-ui/styles";
 import * as d from "d3-fetch";
+import axios from 'axios';
 
 const styles = theme => ({
 	button: {
@@ -96,7 +97,32 @@ export class AddInfo extends Component {
 	}
 
 	submit = event => {
+		const body = {
+			GPA: this.state.gpa,
+			TestType: this.state.testType,
+			Score: this.state.testScore,
+			'Instate/OutofState': this.state.inOrOutOfState,
+			UniversityName: this.state.college,
+			Major: this.state.category
+		}
 
+		const url = `/insertApplicant`;
+
+		console.log('here?');
+
+		axios.request({
+			method: 'POST',
+			url,
+			baseURL: 'http://localhost:5000',
+			data: body,
+			headers: {
+				'Access-Control-Allow-Origin': '*',
+			}
+		}).then(res => {
+			console.log(res.status);
+		}).catch(err => {
+			console.log(err.body);
+		})
 	}
 
 	submitDelete = event => {
@@ -221,11 +247,11 @@ export class AddInfo extends Component {
 							style={{ alignSelf: "center", marginTop: "100px" }}
 							variant="contained"
 							color="primary"
-							onSubmit={this.submit}
+							onClick={this.submit}
 							fullWidth={false}
 						>
 							Submit Info
-                </Button>
+                		</Button>
 					</div>
 					<div className={classes.deleteForm}>
 						<TextField
