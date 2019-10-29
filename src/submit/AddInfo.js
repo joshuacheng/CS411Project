@@ -116,12 +116,13 @@ export class AddInfo extends Component {
 			baseURL: 'http://localhost:5000',
 			data: body,
 			headers: {
+				'Content-Type': 'application/json',
 				'Access-Control-Allow-Origin': '*',
 			}
 		}).then(res => {
 			console.log(res.status);
 		}).catch(err => {
-			console.log(err.body);
+			console.log(err.message);
 		})
 	}
 

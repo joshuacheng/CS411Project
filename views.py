@@ -73,12 +73,12 @@ app=Flask(__name__)
 @app.route('/insertApplicant',methods=['GET','POST'])
 def insertApplicant():
 		if request.method=='POST':
-				gpa=request.form['GPA']
-				testtype=request.form['TestType']
-				score=request.form['Score']
-				state=request.form['Instate/OutofState']
-				school=request.form['UniversityName']
-				major=request.form['Major']
+				gpa=request.json['GPA']
+				testtype=request.json['TestType']
+				score=request.json['Score']
+				state=request.json['Instate/OutofState']
+				school=request.json['UniversityName']
+				major=request.json['Major']
 				Applicant(gpa,testtype,score,state,school,major).insert()
 				Applicant(gpa,testtype,score,state,school,major).insertRelationship()
 				return "Applicant inserted"
@@ -88,13 +88,13 @@ def insertApplicant():
 @app.route('/updateCollege',methods=['GET','POST'])
 def updateCollege():
 	if request.method=='POST':
-		name=request.form['UniversityName']
-		state=request.form['State']
-		admissionrate=request.form['AdmissionRate']
-		instatetuition=request.form['TuitionIS']
-		outofstatetuition=request.form['TuitionOS']
-		testtype=request.form['TestType']
-		testscore=request.form['Score']
+		name=request.json['UniversityName']
+		state=request.json['State']
+		admissionrate=request.json['AdmissionRate']
+		instatetuition=request.json['TuitionIS']
+		outofstatetuition=request.json['TuitionOS']
+		testtype=request.json['TestType']
+		testscore=request.json['Score']
 
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).updateOAR(admissionrate)
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).updateOST(outofstatetuition)
@@ -104,19 +104,19 @@ def updateCollege():
 @app.route('/deleteApplicant',methods=['GET','POST'])
 def deleteApplicant():
 	if request.method=='POST':
-		ids=request.form['ApplicantID']
+		ids=request.json['ApplicantID']
 		Applicant.delete(ids)
 		return "Deleted applicant!"
 @app.route('/insertCollege',methods=['GET','POST'])
 def insertCollege():
 	if request.method=='POST':
-		name=request.form['UniversityName']
-		admissionrate=request.form['AdmissionRate']
-		instatetuition=request.form['TuitionIS']
-		outofstatetuition=request.form['TuitionOS']
-		testtype=request.form['TestType']
-		testscore=request.form['Score']
-		state=request.form['State']
+		name=request.json['UniversityName']
+		admissionrate=request.json['AdmissionRate']
+		instatetuition=request.json['TuitionIS']
+		outofstatetuition=request.json['TuitionOS']
+		testtype=request.json['TestType']
+		testscore=request.json['Score']
+		state=request.json['State']
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).insert(testtype)
 		return "Inserted college!"
 
