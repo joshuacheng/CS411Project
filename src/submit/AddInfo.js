@@ -79,7 +79,9 @@ export class AddInfo extends Component {
 		inOrOutOfState: '',
 		deleteId: '',
 		college: '',
-		collegesGot: false
+		collegesGot: false,
+		deleted: false,
+		insertedApplicant: false
 	})
 
 	componentDidMount = async () => {
@@ -121,17 +123,47 @@ export class AddInfo extends Component {
 			}
 		}).then(res => {
 			console.log(res.status);
+			this.setState({
+				insertedApplicant: true
+			})
 		}).catch(err => {
 			console.log(err.message);
 		})
 	}
 
 	submitDelete = event => {
+		const body = {
+			ApplicantID: this.state.deleteId
+		}
 
+		const url = `/deleteApplicant`;
+
+		console.log('deleting applicant...');
+
+		axios.request({
+			method: 'POST',
+			url,
+			baseURL: 'http://localhost:5000',
+			data: body,
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
+			}
+		}).then(res => {
+			console.log(res.status);
+			console.log("deleted applicant");
+			this.setState({
+				deleted: true
+			})
+		}).catch(err => {
+			console.log(err.message);
+		})
 	}
 
 	render() {
 		const { classes } = this.props;
+
+		console.log(this.props);
 
 		return (
 			<div>
@@ -253,6 +285,10 @@ export class AddInfo extends Component {
 						>
 							Submit Info
                 		</Button>
+						{
+							this.state.insertedApplicant &&
+							<p>Thanks for submitting your info!</p>
+						}
 					</div>
 					<div className={classes.deleteForm}>
 						<TextField
@@ -283,6 +319,10 @@ export class AddInfo extends Component {
 						>
 							Delete by ID
                 		</Button>
+						{
+							this.state.deleted &&
+							<p>Successfully deleted!</p>
+						}
 					</div>
 				</div>
 			</div >

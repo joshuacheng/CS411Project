@@ -4,6 +4,7 @@ import Button from "@material-ui/core/Button";
 import SubmitForm from "./SubmitForm";
 import AddInfo from "./submit/AddInfo";
 import './App.css';
+import UpdateCollege from './updateCollege/updateCollege';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
 		<Router>
 			<Route exact path="/" component={SubmitForm}/>
 			<Route exact path="/submit" component={AddInfo}/>
+			<Route exact path="/updateCollege" component={UpdateCollege}/>
 		</Router>
         {/* <SubmitForm /> */}
     </div>
