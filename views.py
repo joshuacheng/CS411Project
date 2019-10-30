@@ -1,4 +1,4 @@
-from flask import Flask,request,session,redirect,url_for,abort,flash
+from flask import Flask,request,session,redirect,url_for,abort,flash,render_template
 #from flask_restful import Resource,Api
 from neo4jrestclient.client import GraphDatabase
 from py2neo import Graph,Node,Relationship
@@ -82,7 +82,8 @@ def insertApplicant():
 				major=request.json['Major']
 				Applicant(gpa,testtype,score,state,school,major).insert()
 				Applicant(gpa,testtype,score,state,school,major).insertRelationship()
-				return "Applicant inserted"
+				#flash("Applicant inserted")
+		return render_template('/index.html')
 
 				
 
