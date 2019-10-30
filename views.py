@@ -64,7 +64,7 @@ class Applicant:
 		query= "CREATE (a:Applicant{GPA:{gpa},School:{school},ISOS:{state},TestType:{testtype},Score:{score},Major:{major}}) RETURN a.id"
 		return graph.run(query,gpa=self.GPA,school=self.School,state=self.ISOS,score=self.Score,testtype=self.TestType,major=self.Major)
 	def insertRelationship(self):
-		query="MATCH (c:College),(a:Applicant) WHERE c.Name={name} AND a.School={name} CREATE (c)-[:Admitted]->(a) RETURN a"
+		query="MATCH (c:College),(a:Applicant) WHERE c.Name={name} AND a.School={name} CREATE UNIQUE (c)-[:Admitted]->(a) RETURN a"
 		return graph.run(query,name=self.School)
 	
 
@@ -72,6 +72,7 @@ class Applicant:
 app=Flask(__name__)
 @app.route('/insertApplicant',methods=['GET','POST'])
 def insertApplicant():
+		print(request.json)
 		if request.method=='POST':
 				gpa=request.json['GPA']
 				testtype=request.json['TestType']
