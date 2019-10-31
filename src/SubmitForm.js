@@ -151,7 +151,7 @@ export class SubmitForm extends Component {
 						style={{ alignSelf: "center", marginTop: "100px" }}
 						variant="contained"
 						color="primary"
-						onSubmit={this.submit}
+						onClick={this.submit}
 						fullWidth={false}
 					>
 						Check your colleges!

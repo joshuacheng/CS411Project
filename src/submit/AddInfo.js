@@ -314,7 +314,7 @@ export class AddInfo extends Component {
 							style={{ alignSelf: "center", marginTop: "100px" }}
 							variant="contained"
 							color="primary"
-							onSubmit={this.submitDelete}
+							onClick={this.submitDelete}
 							fullWidth={false}
 						>
 							Delete by ID
