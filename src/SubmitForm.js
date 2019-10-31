@@ -83,9 +83,10 @@ export class SubmitForm extends Component {
 			<div>
 				<div className={classes.container}>
 					{
-						fields.map(field => {
+						fields.map((field, idx) => {
 							return (
 								<TextField
+									key={idx}
 									InputProps={{
 										classes: {
 											input: classes.textFieldFontSize
@@ -97,7 +98,7 @@ export class SubmitForm extends Component {
 											root: classes.inputLabel
 										},
 									}}
-									placeholder={field[1]}
+									placeholder={String(field[1])}
 									className={classes.textField}
 									label={field[2]}
 									value={this.state[field[0]]}
@@ -117,9 +118,9 @@ export class SubmitForm extends Component {
 						onChange={this.handleChange('category')}
 					>
 						{
-							categories.map(c => {
+							categories.map((c, idx) => {
 								return (
-									<MenuItem value={c}>
+									<MenuItem key={idx} value={c}>
 										{c}
 									</MenuItem>
 								)
@@ -137,9 +138,9 @@ export class SubmitForm extends Component {
 						onChange={this.handleChange('region')}
 					>
 						{
-							regions.map(c => {
+							regions.map((c, idx) => {
 								return (
-									<MenuItem value={c}>
+									<MenuItem key={idx} value={c}>
 										{c.charAt(0).toUpperCase() + c.slice(1)}
 									</MenuItem>
 								)
