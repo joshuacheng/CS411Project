@@ -6,6 +6,7 @@ import SubmitForm from "./SubmitForm";
 import AddInfo from "./submit/AddInfo";
 import './App.css';
 import UpdateCollege from './updateCollege/updateCollege';
+import InsertCollege from './insertCollege/insertCollege';
 
 const links = [
 	{
@@ -13,12 +14,16 @@ const links = [
 		link: "/"
 	},
 	{
-		name: "Insert applicant",
+		name: "Insert / Delete applicant",
 		link: "/submit"
 	},
 	{
 		name: "Update college",
 		link: "/updateCollege"
+	},
+	{
+		name: "Insert college",
+		link: "/insertCollege"
 	}
 ]
 
@@ -50,7 +55,7 @@ function App() {
 			<Route exact path="/" component={SubmitForm}/>
 			<Route exact path="/submit" component={AddInfo}/>
 			<Route exact path="/updateCollege" component={UpdateCollege}/>
-			{/* <Route exact path+ */}
+			<Route exact path="/insertCollege" component={InsertCollege}/>
 		</Router>
         {/* <SubmitForm /> */}
     </div>
