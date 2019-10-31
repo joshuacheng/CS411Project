@@ -6,6 +6,21 @@ import AddInfo from "./submit/AddInfo";
 import './App.css';
 import UpdateCollege from './updateCollege/updateCollege';
 
+const links = [
+	{
+		name: "Home",
+		link: "/"
+	},
+	{
+		name: "Insert applicant",
+		link: "/submit"
+	},
+	{
+		name: "Update college",
+		link: "/updateCollege"
+	}
+]
+
 function App() {
   return (
     <div className="App">
@@ -13,12 +28,16 @@ function App() {
         <h1>
           AdmitMe
         </h1>
+		{/* <div className=> */}
+
+		{/* </div> */}
       </header>
 
 		<Router>
 			<Route exact path="/" component={SubmitForm}/>
 			<Route exact path="/submit" component={AddInfo}/>
 			<Route exact path="/updateCollege" component={UpdateCollege}/>
+			{/* <Route exact path+ */}
 		</Router>
         {/* <SubmitForm /> */}
     </div>
