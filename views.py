@@ -51,6 +51,10 @@ class College:
 			scores=self.SAT
 
 		return graph.run(query,name=self.Name,sentinel=-1,ost=self.OST,ist=self.IST,score=scores,admissionrate=self.OAR,location=self.State).dump()
+
+	def findAll():
+		query="MATCH (c:College) RETURN c"
+		return graph.run(query).data()
 class Applicant:
 	def __init__(self,gpa,testtype,score,state,school,major):
 		self.GPA=gpa
@@ -129,6 +133,35 @@ def insertCollege():
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).insert(testtype)
 		return "Inserted college!"
 
+@app.route('/returnColleges',methods=['GET','POST'])
+def returnAllColleges():
+	if request.method=='GET':
+		vals=College.findAll()
+		
+	dictcolleges={}
+	# print(len(vals))
+	# for a in range(0,len(vals)):
+
+	# 	name=vals[a].get('c').get('Name')
+	# 	act=vals[a].get('c').get('ACT')
+	# 	sat=vals[a].get('c').get('SAT')
+	# 	state=vals[a].get('c').get('State')
+	# 	acceptance=vals[a].get('c').get('OAR')
+	# 	ost=vals[a].get('c').get('OST')
+	# 	ist=vals[a].get('c').get('IST')
+
+	# 	dictcolleges["Name"]=name
+	# 	dictcolleges["ACT"]=act
+	# 	dictcolleges["SAT"]=sat
+	# 	dictcolleges["State"]=state
+	# 	dictcolleges["OAR"]=acceptance
+	# 	dictcolleges["OST"]=ost
+	# 	dictcolleges["IST"]=ist
+	dictcolleges['data'] = vals
+
+
+
+	return dictcolleges
 
 
 
