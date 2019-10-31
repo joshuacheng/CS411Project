@@ -66,6 +66,12 @@ class Applicant:
 	def insertRelationship(self):
 		query="MATCH (c:College),(a:Applicant) WHERE c.Name={name} AND a.School={name} CREATE UNIQUE (c)-[:Admitted]->(a) RETURN a"
 		return graph.run(query,name=self.School)
+	def findRelationship(idtodelete):
+		query="MATCH (c:College)-[r:Admitted]->(a:Applicant) WHERE  ID(a)={id} DELETE r"
+		return graph.run(query,id=idtodelete)
+	def delete(idtodelete):
+		query="MATCH (a:Applicant) WHERE ID(a)={id} DELETE a"
+		return graph.run(query,id=idtodelete)
 	
 
 
@@ -83,7 +89,7 @@ def insertApplicant():
 				Applicant(gpa,testtype,score,state,school,major).insert()
 				Applicant(gpa,testtype,score,state,school,major).insertRelationship()
 				#flash("Applicant inserted")
-		return render_template('/index.html')
+		return render_template('/applicantinserted.html')
 
 				
 
@@ -107,7 +113,8 @@ def updateCollege():
 def deleteApplicant():
 	if request.method=='POST':
 		ids=request.json['ApplicantID']
-		Applicant.delete(ids)
+		Applicant.findRelationship(int(ids))
+		Applicant.delete(int(ids))
 		return "Deleted applicant!"
 @app.route('/insertCollege',methods=['GET','POST'])
 def insertCollege():
