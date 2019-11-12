@@ -51,10 +51,10 @@ const categories = [
 ]
 
 const regions = [
-	'midwest',
-	'rockies',
-	'east',
-	'west'
+	'Midwest',
+	'Northeast',
+	'West',
+	'South'
 ]
 
 export class SubmitForm extends Component {
@@ -63,7 +63,9 @@ export class SubmitForm extends Component {
 		return { ...state, [field[0]]: field[1] }
 	}, {
 		category: '',
-		region: ''
+		region: '',
+		received: false,
+		loading: false
 	})
 
 	handleChange = name => event => {
@@ -73,7 +75,40 @@ export class SubmitForm extends Component {
 	}
 
 	submit = event => {
-		
+		const body = {
+			GPA: this.state.gpa,
+			actScore: this.state.actScore,
+			satScore: this.state.satScore,
+			maximumTuition: this.state.tuitionUpper,
+			majorCategory: this.state.category,
+			region: this.state.region
+		}
+
+		const url = `/matchColleges`;
+
+		console.log('chancing...');
+
+		this.setState({
+			loading: true
+		})
+		axios.request({
+			method: 'POST',
+			url,
+			baseURL: 'http://localhost:5000',
+			data: body,
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
+			}
+		}).then(res => {
+			console.log(res.status);
+			this.setState({
+				received: true,
+				loading: false
+			})
+		}).catch(err => {
+			console.log(err.message);
+		})
 	}
 
 	render() {
@@ -155,7 +190,19 @@ export class SubmitForm extends Component {
 						fullWidth={false}
 					>
 						Check your colleges!
-                </Button>
+                	</Button>
+				{
+					this.state.loading && 
+					<p>
+						Results loading...
+					</p>
+				}
+				{
+					this.state.received &&
+					<p>
+						Results will be displayed here soon tm
+					</p>
+				}
 				</div>
 
 			</div >
