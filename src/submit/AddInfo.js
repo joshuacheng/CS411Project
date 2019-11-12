@@ -80,16 +80,28 @@ export class AddInfo extends Component {
 		deleteId: '',
 		college: '',
 		collegesGot: false,
+		allColleges: null,
 		deleted: false,
 		insertedApplicant: false
 	})
 
 	componentDidMount = async () => {
-		this.colleges = await d.csv("/colleges.csv").then(data => {
-			// console.log(Object.values(data).slice(0, -1));
-			return Array.from(Object.values(data).slice(0, -1));
+		// this.colleges = await d.csv("/colleges.csv").then(data => {
+		// 	// console.log(Object.values(data).slice(0, -1));
+		// 	return Array.from(Object.values(data).slice(0, -1));
+		// });
+		axios.request('/returnColleges', {
+			method: 'GET',
+			url,
+			baseURL: 'http://localhost:5000',
+			headers: {
+			'Content-Type': 'application/json',
+			'Access-Control-Allow-Origin': '*',
+			}
+		}).then(res => {
+			console.log(res.data);
+			this.setState({ collegesGot: true });
 		});
-		this.setState({ collegesGot: true });
 	}
 
 	handleChange = name => event => {
