@@ -112,6 +112,7 @@ def updateCollege():
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).updateOST(outofstatetuition)
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).updateIST(instatetuition)
 		College(name,admissionrate,instatetuition,outofstatetuition,testtype,testscore,state).updatescore(testtype,testscore)
+		print("College updated!")
 		return "Updated college!"
 @app.route('/deleteApplicant',methods=['GET','POST'])
 def deleteApplicant():
