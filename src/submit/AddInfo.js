@@ -99,8 +99,11 @@ export class AddInfo extends Component {
 			'Access-Control-Allow-Origin': '*',
 			}
 		}).then(res => {
-			console.log(res.data);
-			this.setState({ collegesGot: true });
+			// console.log(res.data);
+			this.setState({ 
+				collegesGot: true,
+				allColleges: res.data.data
+			});
 		});
 	}
 
@@ -277,7 +280,7 @@ export class AddInfo extends Component {
 									onChange={this.handleChange('college')}
 								>
 									{
-										this.colleges.map((c, idx) => {
+										this.state.allColleges.map((c, idx) => {
 											return (
 												<MenuItem key={idx} value={c.Name}>
 													{c.Name}
