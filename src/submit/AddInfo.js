@@ -102,7 +102,9 @@ export class AddInfo extends Component {
 			// console.log(res.data);
 			this.setState({ 
 				collegesGot: true,
-				allColleges: res.data.data
+				allColleges: res.data.data.map(college => {
+					return { ...college.c }
+				})
 			});
 		});
 	}
