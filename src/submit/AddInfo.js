@@ -90,9 +90,9 @@ export class AddInfo extends Component {
 		// 	// console.log(Object.values(data).slice(0, -1));
 		// 	return Array.from(Object.values(data).slice(0, -1));
 		// });
-		axios.request('/returnColleges', {
+		axios.request({
 			method: 'GET',
-			url,
+			url: '/returnColleges',
 			baseURL: 'http://localhost:5000',
 			headers: {
 			'Content-Type': 'application/json',

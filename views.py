@@ -2,6 +2,7 @@ from flask import Flask,request,session,redirect,url_for,abort,flash,render_temp
 #from flask_restful import Resource,Api
 from neo4jrestclient.client import GraphDatabase
 from py2neo import Graph,Node,Relationship
+from flask_cors import CORS
 import os
 
 url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
@@ -80,6 +81,8 @@ class Applicant:
 
 
 app=Flask(__name__)
+CORS(app)
+
 @app.route('/insertApplicant',methods=['GET','POST'])
 def insertApplicant():
 		print(request.json)
