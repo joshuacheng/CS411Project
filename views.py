@@ -4,11 +4,17 @@ from neo4jrestclient.client import GraphDatabase
 from py2neo import Graph,Node,Relationship
 from flask_cors import CORS
 import os
-
+import mysql.connector
 url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
 username='neo4j'
 password='alawini'
 graph = Graph(url + '/db/data/', username=username, password=password)
+mydb = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd="Zakimsjhs2017"
+)
+mycursor=mydb.cursor()
 
 class College:
 	def __init__(self,name,admissionrate,ist,ost,testtype,score,state):
@@ -51,7 +57,7 @@ class College:
 			query="CREATE (c:College{Name:{name},OST:{ost},IST:{ist},OAR:{admissionrate},ACT:{sentinel},SAT:{score},State:{location}}) RETURN c "
 			scores=self.SAT
 
-		return graph.run(query,name=self.Name,sentinel=-1,ost=self.OST,ist=self.IST,score=scores,admissionrate=self.OAR,location=self.State).dump()
+		return graph.run(query,name=self.Name,sentinel=-1,ost=self.OST,ist=self.IST,score=scores,admissionrate=self.OAR,location=self.State)
 
 	def findAll():
 		query="MATCH (c:College) RETURN c"
@@ -166,6 +172,35 @@ def returnAllColleges():
 
 
 	return dictcolleges
+@app.route('/matchColleges',methods=["GET",'POST'])
+def matchColleges():
+	reach=[]
+	match=[]
+	safety=[]
+
+	if request.method=="POST":
+		gpa=request.json['GPA']
+		act=request.json['actScore']
+		sat=request.json['satScore']
+		tuition=request.json['maximumTuition']
+		major=request.json['majorCategory']
+		region=request.json['region']
+		mycursor.execute("USE project")
+		maxscore=act
+		if sat!=0:
+				mycursor.execute("SELECT ACT FROM conversion where SAT=%s",(sat,))
+				myresult = mycursor.fetchall()
+				convert=myresult[0][0]
+				maxscore=max(int(convert),int(act))
+		index=(maxscore*10)+(200*float(gpa))
+		print(index)
+		query="MATCH (c:College)-[Admitted]->(a:Applicant) WHERE a.Major={majors} RETURN AVG(toFloat(a.GPA)) as avggpa,a.School"
+		results=graph.run(query,majors=major)
+		for a in results:
+			print(a)
+	return "Colleges matched!"
+
+
 
 
 
