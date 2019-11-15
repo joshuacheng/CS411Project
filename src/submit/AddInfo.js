@@ -86,10 +86,6 @@ export class AddInfo extends Component {
 	})
 
 	componentDidMount = async () => {
-		// this.colleges = await d.csv("/colleges.csv").then(data => {
-		// 	// console.log(Object.values(data).slice(0, -1));
-		// 	return Array.from(Object.values(data).slice(0, -1));
-		// });
 		axios.request({
 			method: 'GET',
 			url: '/returnColleges',
