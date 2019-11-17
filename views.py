@@ -5,6 +5,8 @@ from py2neo import Graph,Node,Relationship
 from flask_cors import CORS
 import os
 import mysql.connector
+from collections import defaultdict
+import numpy as np
 url = os.environ.get('GRAPHENEDB_URL', 'http://localhost:7474')
 username='neo4j'
 password='alawini'
@@ -177,7 +179,9 @@ def matchColleges():
 	reach=[]
 	match=[]
 	safety=[]
-
+	master=defaultdict(list)
+	
+	
 	if request.method=="POST":
 		gpa=request.json['GPA']
 		act=request.json['actScore']
@@ -192,13 +196,70 @@ def matchColleges():
 				myresult = mycursor.fetchall()
 				convert=myresult[0][0]
 				maxscore=max(int(convert),int(act))
-		index=(maxscore*10)+(200*float(gpa))
-		print(index)
-		query="MATCH (c:College)-[Admitted]->(a:Applicant) WHERE a.Major={majors} RETURN AVG(toFloat(a.GPA)) as avggpa,a.School"
-		results=graph.run(query,majors=major)
+		indexapp=(maxscore*10)+(200*float(gpa))
+		print(indexapp)
+		query="MATCH (c:College)-[Admitted]->(a:Applicant) WHERE a.Major={majors} and a.TestType={test} RETURN toFloat(a.GPA)*toInt(200)+(toInt(a.Score)*10) as idx,a.School as School"
+		results=graph.run(query,majors=major,test="ACT")
+		allcolleges=College.findAll()
+		names=[]
+		for c in allcolleges:
+			val=c.get('c')
+			name=val.get('Name')
+			names.append(name)
+		
+
+			
+
 		for a in results:
-			print(a)
-	return "Colleges matched!"
+			index=a[0]
+			college=a[1]
+			master[college].append(index)
+		query="MATCH (c:College)-[Admitted]->(a:Applicant) WHERE a.Major={majors} and a.TestType={test} RETURN a.School as School,a.GPA,a.Score"
+		satapps=graph.run(query,majors=major,test="SAT")
+
+		for b in satapps:
+			name=b[0]
+			gpa=b[1]
+			score=b[2]
+			mycursor.execute("SELECT ACT FROM conversion where SAT=%s",(score,))
+			myresult = mycursor.fetchall()
+			convert=myresult[0][0]
+			idx=(float(gpa)*200)+(10*int(convert))
+			master[name].append(idx)
+		
+
+	keys=master.keys()
+	for a in keys:
+		vals=np.array(master[a])
+		sd=np.std(vals)
+		avg=np.mean(vals)
+		if indexapp>=sd+avg:
+			safety.append(a)
+		elif indexapp>=avg and indexapp<avg+sd:
+			match.append(a)
+		elif indexapp>=avg-sd:
+			reach.append(a)
+	print(reach,safety,match)
+	matches=defaultdict(list)
+	for a in reach:
+		matches['Reach'].append(a)
+
+	for b in match:
+		matches['Match'].append(b)
+	for c in safety:
+		matches['Safety'].append(c)
+
+
+	
+
+		
+
+		
+
+		
+		#print(master)
+
+	return matches
 
 
 
