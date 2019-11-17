@@ -241,6 +241,8 @@ def matchColleges():
 			reach.append(a)
 	print(reach,safety,match)
 	matches=defaultdict(list)
+
+	
 	for a in reach:
 		matches['Reach'].append(a)
 
@@ -248,7 +250,10 @@ def matchColleges():
 		matches['Match'].append(b)
 	for c in safety:
 		matches['Safety'].append(c)
-
+	matches['Reach']
+	matches['Safety']
+	matches['Match']
+#query="MATCH (c:College) "
 
 	
 

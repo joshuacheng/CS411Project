@@ -131,7 +131,7 @@ export class SubmitForm extends Component {
 				'Access-Control-Allow-Origin': '*',
 			}
 		}).then(res => {
-			console.log(res.status);
+			console.log(res);
 			this.setState({
 				received: true,
 				loading: false,
