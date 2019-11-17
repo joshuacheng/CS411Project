@@ -11,6 +11,10 @@ const styles = theme => ({
 	button: {
 		width: "50%"
 	},
+	super: {
+		display: 'flex',
+		flexDirection: 'row'
+	},
 	container: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -28,6 +32,14 @@ const styles = theme => ({
 	},
 	dropdown: {
 		margin: "40px 10px"
+	},
+	header: {
+		fontSize: '50px',
+		textDecoration: 'underline'
+	},
+	level: {
+		display: 'flex',
+		flexDirection: 'column'
 	}
 });
 
@@ -57,6 +69,23 @@ const regions = [
 	'South'
 ]
 
+const mockData = {
+	"Match": [
+		"University of California San Diego",
+		"University of California Los Angeles",
+		"University of California Santa Barbara"
+	],
+	"Safety": [
+		"University of California Merced",
+		"University of California Irvine",
+		"University of California Davis"
+	],
+	"Reach": [
+		"University of California Santa Cruz",
+		"University of California Riverside",
+	]
+}
+
 export class SubmitForm extends Component {
 
 	state = fields.reduce((state, field) => {
@@ -65,7 +94,8 @@ export class SubmitForm extends Component {
 		category: '',
 		region: '',
 		received: false,
-		loading: false
+		loading: false,
+		collegesList: {}
 	})
 
 	handleChange = name => event => {
@@ -104,7 +134,8 @@ export class SubmitForm extends Component {
 			console.log(res.status);
 			this.setState({
 				received: true,
-				loading: false
+				loading: false,
+				collegesList: res.data
 			})
 		}).catch(err => {
 			console.log(err.message);
@@ -115,7 +146,7 @@ export class SubmitForm extends Component {
 		const { classes } = this.props;
 
 		return (
-			<div>
+			<div className={classes.super}>
 				<div className={classes.container}>
 					{
 						fields.map((field, idx) => {
@@ -197,14 +228,48 @@ export class SubmitForm extends Component {
 						Results loading...
 					</p>
 				}
+				</div>
 				{
 					this.state.received &&
-					<p>
-						Results will be displayed here soon tm
-					</p>
+					<div className={classes.container}>
+						<div className={classes.level}>
+							<h1 className={classes.header}>Reach</h1>
+							{
+								this.state.collegesList.Reach.map((reach, i) => {
+									return (
+										<div key={i}>
+											<p>{reach}</p>
+										</div>
+									)
+								})
+							}
+						</div>
+						<div className={classes.level}>
+							<h1 className={classes.header}>Match</h1>
+							{
+								this.state.collegesList.Match.map((match, i) => {
+									return (
+										<div key={i}>
+											<p>{match}</p>
+										</div>
+									)
+								})
+							}
+						</div>
+						<div className={classes.level}>
+							<h1 className={classes.header}>Safety</h1>
+							{
+								this.state.collegesList.Safety.map((safety, i) => {
+									return (
+										<div key={i}>
+											<p>{safety}</p>
+										</div>
+									)
+								})
+							}
+						</div>
+					</div>	
 				}
-				</div>
-
 			</div >
 		)
 	}
