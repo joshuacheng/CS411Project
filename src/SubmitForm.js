@@ -47,7 +47,7 @@ const fields = [
 	['gpa', 0, 'GPA'],
 	['actScore', 0, 'ACT Score'],
 	['satScore', 0, 'SAT Score'],
-	['tuitionLower', 0, 'Minimum tuition'],
+	['state', '', 'State'],
 	['tuitionUpper', 0, 'Maximum tuition'],
 ]
 
@@ -105,8 +105,12 @@ export class SubmitForm extends Component {
 	}
 
 	submit = event => {
+		const { state } = this.state;
+		const uppercaseState = state.charAt(0).toUpperCase() + state.slice(1);
+
 		const body = {
 			GPA: this.state.gpa,
+			state: uppercaseState,
 			actScore: this.state.actScore,
 			satScore: this.state.satScore,
 			maximumTuition: this.state.tuitionUpper,
