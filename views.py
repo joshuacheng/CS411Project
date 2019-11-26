@@ -189,6 +189,7 @@ def matchColleges():
 		tuition=request.json['maximumTuition']
 		major=request.json['majorCategory']
 		region=request.json['region']
+		state=request.json['state']
 		mycursor.execute("USE project")
 		maxscore=act
 		if sat!=0:
@@ -242,18 +243,30 @@ def matchColleges():
 	print(reach,safety,match)
 	matches=defaultdict(list)
 
+
 	
-	for a in reach:
+	query="MATCH (c:College) WHERE c.State={state} and c.IST<={max} RETURN c.Name"
+	result=graph.run(query,state=state,max=tuition)
+	afford=[]
+	for a in result:
+		afford.append(a[0])
+	print(afford)
+	matchafford=[item for item in match if item in afford]
+	reachafford=[item for item in reach if item in afford]
+	safetyafford=[item for item in safety if item in afford]
+
+
+
+	for a in reachafford:
 		matches['Reach'].append(a)
 
-	for b in match:
+	for b in matchafford:
 		matches['Match'].append(b)
-	for c in safety:
+	for c in safetyafford:
 		matches['Safety'].append(c)
 	matches['Reach']
 	matches['Safety']
 	matches['Match']
-#query="MATCH (c:College) "
 
 	
 
