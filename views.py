@@ -186,7 +186,7 @@ def matchColleges():
 		gpa=request.json['GPA']
 		act=request.json['actScore']
 		sat=request.json['satScore']
-		tuition=request.json['maximumTuition']
+		tuition=int(request.json['maximumTuition'])
 		major=request.json['majorCategory']
 		region=request.json['region']
 		state=request.json['state']
@@ -240,33 +240,65 @@ def matchColleges():
 			match.append(a)
 		elif indexapp>=avg-sd:
 			reach.append(a)
-	print(reach,safety,match)
+	#print(reach,safety,match)
 	matches=defaultdict(list)
 
 
 	
-	query="MATCH (c:College) WHERE c.State={state} and c.IST<={max} RETURN c.Name"
+	query="MATCH (c:College) WHERE c.State={state} and toInt(c.IST)<={max} RETURN c.Name"
 	result=graph.run(query,state=state,max=tuition)
 	afford=[]
 	for a in result:
 		afford.append(a[0])
 	print(afford)
+	
+	query="MATCH (c:College) WHERE c.State<>{state} and c.OST<={max} RETURN c.Name"
+	results=graph.run(query,state=state,max=tuition)
+	for c in results:
+		afford.append(c[0])
 	matchafford=[item for item in match if item in afford]
 	reachafford=[item for item in reach if item in afford]
 	safetyafford=[item for item in safety if item in afford]
 
 
 
-	for a in reachafford:
-		matches['Reach'].append(a)
+	if region!='No Preference':
+			mycursor.execute("SELECT State FROM state WHERE region=%s ",(region,))
+			results=mycursor.fetchall()
+			regions=[]
+			for a in results:
+				regions.append(a[0])
+	
+			schoolsinregion=[]
+			for c in regions:
+				query="MATCH (c:College) WHERE c.State={state} RETURN c.Name"
+				answer=graph.run(query,state=c)
+				for b in answer:
+					schoolsinregion.append(b[0])
+			reachaffordregion=[item for item in reachafford if item in schoolsinregion]
+			matchaffordregion=[item for item in matchafford if item in schoolsinregion]
+			safetyaffordregion=[item for item in safetyafford if item in schoolsinregion]
+			for a in reachaffordregion:
+				matches['Reach'].append(a)
+			for b in matchaffordregion:
+				matches['Safety'].append(b)
+			for c in safetyaffordregion:
+				matches['Match'].append(c)
+	else:
 
-	for b in matchafford:
-		matches['Match'].append(b)
-	for c in safetyafford:
-		matches['Safety'].append(c)
+			for a in reachafford:
+				matches['Reach'].append(a)
+
+			for b in matchafford:
+				matches['Match'].append(b)
+			for c in safetyafford:
+				matches['Safety'].append(c)
+	
 	matches['Reach']
 	matches['Safety']
 	matches['Match']
+
+
 
 	
 

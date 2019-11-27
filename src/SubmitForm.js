@@ -66,7 +66,8 @@ const regions = [
 	'Midwest',
 	'Northeast',
 	'West',
-	'South'
+	'South',
+	'No Preference'
 ]
 
 const mockData = {
