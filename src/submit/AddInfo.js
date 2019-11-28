@@ -316,7 +316,7 @@ export class AddInfo extends Component {
 									root: classes.inputLabel
 								},
 							}}
-							placeholder={"ID to delete"}
+							placeholder={"User to delete"}
 							className={classes.textFieldDelete}
 							label={"Delete data"}
 							value={this.state['deleteId']}
@@ -330,7 +330,7 @@ export class AddInfo extends Component {
 							onClick={this.submitDelete}
 							fullWidth={false}
 						>
-							Delete by ID
+							Delete by User
                 		</Button>
 						{
 							this.state.deleted &&

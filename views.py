@@ -80,10 +80,10 @@ class Applicant:
 		query="MATCH (c:College),(a:Applicant) WHERE c.Name={name} AND a.School={name} CREATE UNIQUE (c)-[:Admitted]->(a) RETURN a"
 		return graph.run(query,name=self.School)
 	def findRelationship(idtodelete):
-		query="MATCH (c:College)-[r:Admitted]->(a:Applicant) WHERE  ID(a)={id} DELETE r"
+		query="MATCH (c:College)-[r:Admitted]->(a:Applicant) WHERE  a.User={id} DELETE r"
 		return graph.run(query,id=idtodelete)
 	def delete(idtodelete):
-		query="MATCH (a:Applicant) WHERE ID(a)={id} DELETE a"
+		query="MATCH (a:Applicant) WHERE a.User={id} DELETE a"
 		return graph.run(query,id=idtodelete)
 	
 
@@ -129,8 +129,8 @@ def updateCollege():
 def deleteApplicant():
 	if request.method=='POST':
 		ids=request.json['ApplicantID']
-		Applicant.findRelationship(int(ids))
-		Applicant.delete(int(ids))
+		Applicant.findRelationship(ids)
+		Applicant.delete(ids)
 		return "Deleted applicant!"
 @app.route('/insertCollege',methods=['GET','POST'])
 def insertCollege():
@@ -184,21 +184,23 @@ def matchColleges():
 	
 	if request.method=="POST":
 		gpa=request.json['GPA']
-		act=request.json['actScore']
-		sat=request.json['satScore']
+		act=int(request.json['actScore'])
+		sat=int(request.json['satScore'])
 		tuition=int(request.json['maximumTuition'])
 		major=request.json['majorCategory']
 		region=request.json['region']
 		state=request.json['state']
 		mycursor.execute("USE project")
-		maxscore=act
+		
 		if sat!=0:
 				mycursor.execute("SELECT ACT FROM conversion where SAT=%s",(sat,))
 				myresult = mycursor.fetchall()
 				convert=myresult[0][0]
 				maxscore=max(int(convert),int(act))
+		else:
+			maxscore=act
 		indexapp=(maxscore*10)+(200*float(gpa))
-		print(indexapp)
+		
 		query="MATCH (c:College)-[Admitted]->(a:Applicant) WHERE a.Major={majors} and a.TestType={test} RETURN toFloat(a.GPA)*toInt(200)+(toInt(a.Score)*10) as idx,a.School as School"
 		results=graph.run(query,majors=major,test="ACT")
 		allcolleges=College.findAll()
@@ -293,11 +295,24 @@ def matchColleges():
 				matches['Match'].append(b)
 			for c in safetyafford:
 				matches['Safety'].append(c)
-	
+
 	matches['Reach']
 	matches['Safety']
 	matches['Match']
-
+	return matches
+@app.route('/competitive',methods=['GET','POST'])
+def mostLeastCompetitive():
+	if request.method=='GET':
+		mycursor.execute("USE project")
+		major=request.json['majorCategory']
+		region=request.json['region']
+		mycursor.execute("DROP TABLE canattend") 
+		mycursor.execute("CREATE TABLE canattend AS SELECT * FROM Colleges c NATURAL JOIN state r WHERE r.Region=%s",(region,))
+		mycursor.execute("SELECT * from canattend")
+		results=mycursor.fetchall()
+		for a in results:
+			print(a)
+	return "Colleges returned!"
 
 
 	
@@ -309,7 +324,7 @@ def matchColleges():
 		
 		#print(master)
 
-	return matches
+	
 
 
 
