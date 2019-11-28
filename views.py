@@ -302,20 +302,44 @@ def matchColleges():
 	return matches
 @app.route('/competitive',methods=['GET','POST'])
 def mostLeastCompetitive():
+	colleges=[]
+	ans={}
 	if request.method=='GET':
 		mycursor.execute("USE project")
-		major=request.json['majorCategory']
+		major=str(request.json['majorCategory'])
 		region=request.json['region']
 		mycursor.execute("DROP TABLE canattend") 
 		mycursor.execute("CREATE TABLE canattend AS SELECT * FROM Colleges c NATURAL JOIN state r WHERE r.Region=%s",(region,))
 		mycursor.execute("SELECT * from canattend")
 		results=mycursor.fetchall()
 		for a in results:
-			print(a)
-	return "Colleges returned!"
+			colleges.append(a[2])
+		print(colleges)
+		mycursor.execute("DROP TABLE IF EXISTS sat")
+		mycursor.execute(" CREATE TABLE sat AS SELECT * FROM Applicants a JOIN conversion c ON a.TestScore=c.SAT")
+		mycursor.execute("DROP TABLE IF EXISTS master")
+		mycursor.execute("CREATE TABLE master AS SELECT * FROM Applicants NATURAL join sat")
+		mycursor.execute("UPDATE Applicants a NATURAL JOIN sat s SET a.TestScore=s.ACT WHERE a.User=s.User")
+		mycursor.execute("DROP TABLE IF EXISTS final")
+		mycursor.execute(" CREATE TABLE final AS SELECT *, ((TestScore*10)+(GPA*200)) as idx FROM Applicants")
+		#mycursor.execute("SELECT * FROM final")
+		mycursor.execute("SELECT School,AVG(idx) as AVGINDEX FROM final  WHERE Major=%s GROUP BY School ORDER BY AVGINDEX DESC",(major,))
+		result=mycursor.fetchall()
+		for a in result:
+			if a[0] in colleges:
+				ans['Most Competitive']=a[0]
+				break
+		mycursor.execute("SELECT School,AVG(idx) as AVGINDEX FROM final  WHERE Major=%s GROUP BY School ORDER BY AVGINDEX ASC",(major,))
+		res=mycursor.fetchall()
+		for a in res:
+			if a[0] in colleges:
+				ans['Least Competitive']=a[0]
+				break
+		ans['Most Competitive']
+		ans['Least Competitive']
 
 
-	
+	return ans
 
 		
 
