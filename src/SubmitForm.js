@@ -70,23 +70,6 @@ const regions = [
 	'No Preference'
 ]
 
-const mockData = {
-	"Match": [
-		"University of California San Diego",
-		"University of California Los Angeles",
-		"University of California Santa Barbara"
-	],
-	"Safety": [
-		"University of California Merced",
-		"University of California Irvine",
-		"University of California Davis"
-	],
-	"Reach": [
-		"University of California Santa Cruz",
-		"University of California Riverside",
-	]
-}
-
 export class SubmitForm extends Component {
 
 	state = fields.reduce((state, field) => {

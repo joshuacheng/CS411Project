@@ -7,6 +7,7 @@ import AddInfo from "./submit/AddInfo";
 import './App.css';
 import UpdateCollege from './updateCollege/updateCollege';
 import InsertCollege from './insertCollege/insertCollege';
+import Regions from './regionColleges/regions';
 
 const links = [
 	{
@@ -24,6 +25,10 @@ const links = [
 	{
 		name: "Insert college",
 		link: "/insertCollege"
+	},
+	{
+		name: "Find regionally competitive colleges",
+		link: "/region"
 	}
 ]
 
@@ -53,6 +58,7 @@ function App() {
 
 		
 			<Route exact path="/" component={SubmitForm}/>
+			<Route exact path="/region" component={Regions}/>
 			<Route exact path="/submit" component={AddInfo}/>
 			<Route exact path="/updateCollege" component={UpdateCollege}/>
 			<Route exact path="/insertCollege" component={InsertCollege}/>
