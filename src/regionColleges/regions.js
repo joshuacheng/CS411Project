@@ -195,11 +195,11 @@ export class Regional extends Component {
 					<div className={classes.container}>
 						<div className={classes.level}>
 							<h2 className={classes.header}>Most competitive college</h2>
-							<p>{this.state.collegesList["Most competitive"]}</p>
+							<p>{this.state.collegesList["Most Competitive"]}</p>
 						</div>
 						<div className={classes.level}>
 							<h2 className={classes.header}>Least competitive college</h2>
-							<p>{this.state.collegesList["Least competitive"]}</p>
+							<p>{this.state.collegesList["Least Competitive"]}</p>
 						</div>
 					</div>
 				}

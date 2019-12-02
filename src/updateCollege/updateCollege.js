@@ -68,15 +68,28 @@ export class UpdateCollege extends Component {
 		testType: '',
 		college: '',
 		collegesGot: false,
+		allColleges: null,
 		updatedCollege: false
 	})
 
 	componentDidMount = async () => {
-		this.colleges = await d.csv("/colleges.csv").then(data => {
-			// console.log(Object.values(data).slice(0, -1));
-			return Array.from(Object.values(data).slice(0, -1));
+		axios.request({
+			method: 'GET',
+			url: '/returnColleges',
+			baseURL: 'http://localhost:5000',
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
+			}
+		}).then(res => {
+			// console.log(res.data);
+			this.setState({
+				collegesGot: true,
+				allColleges: res.data.data.map(college => {
+					return { ...college.c }
+				})
+			});
 		});
-		this.setState({ collegesGot: true });
 	}
 
 	handleChange = name => event => {
@@ -208,15 +221,15 @@ export class UpdateCollege extends Component {
 									value={this.state.college}
 									onChange={this.handleChange('college')}
 								>
-									{
-										this.colleges.map((c, idx) => {
-											return (
-												<MenuItem key={idx} value={c.Name}>
-													{c.Name}
-												</MenuItem>
-											)
-										})
-									}
+								{
+									this.state.allColleges.map((c, idx) => {
+										return (
+											<MenuItem key={idx} value={c.Name}>
+												{c.Name}
+											</MenuItem>
+										)
+									})
+								}
 								</Select>
 							</div>
 						}
