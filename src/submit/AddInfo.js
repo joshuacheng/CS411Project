@@ -265,30 +265,28 @@ export class AddInfo extends Component {
 								{"Out of State"}
 							</MenuItem>
 						</Select>
-						{this.state.collegesGot &&
-							<div>
-								<InputLabel htmlFor="accepted-college">College Accepted To</InputLabel>
-								< Select
-									className={classes.dropdown}
-									inputProps={{
-										name: 'college',
-										id: 'accepted-college'
-									}}
-									value={this.state.college}
-									onChange={this.handleChange('college')}
-								>
-									{
-										this.state.allColleges.map((c, idx) => {
-											return (
-												<MenuItem key={idx} value={c.Name}>
-													{c.Name}
-												</MenuItem>
-											)
-										})
-									}
-								</Select>
-							</div>
-						}
+						<div>
+							<InputLabel htmlFor="accepted-college">College Accepted To</InputLabel>
+							< Select
+								className={classes.dropdown}
+								inputProps={{
+									name: 'college',
+									id: 'accepted-college'
+								}}
+								value={this.state.college}
+								onChange={this.handleChange('college')}
+							>
+								{this.state.collegesGot &&
+									this.state.allColleges.map((c, idx) => {
+										return (
+											<MenuItem key={idx} value={c.Name}>
+												{c.Name}
+											</MenuItem>
+										)
+									})
+								}
+							</Select>
+						</div>
 						<Button
 							style={{ alignSelf: "center", marginTop: "100px" }}
 							variant="contained"

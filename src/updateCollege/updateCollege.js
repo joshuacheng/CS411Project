@@ -209,19 +209,18 @@ export class UpdateCollege extends Component {
 								})
 							}
 						</Select> */}
-						{this.state.collegesGot &&
-							<div>
-								<InputLabel htmlFor="accepted-college">College Accepted To</InputLabel>
-								< Select
-									className={classes.dropdown}
-									inputProps={{
-										name: 'college',
-										id: 'accepted-college'
-									}}
-									value={this.state.college}
-									onChange={this.handleChange('college')}
-								>
-								{
+						<div>
+							<InputLabel htmlFor="accepted-college">College Accepted To</InputLabel>
+							< Select
+								className={classes.dropdown}
+								inputProps={{
+									name: 'college',
+									id: 'accepted-college'
+								}}
+								value={this.state.college}
+								onChange={this.handleChange('college')}
+							>
+								{this.state.collegesGot &&
 									this.state.allColleges.map((c, idx) => {
 										return (
 											<MenuItem key={idx} value={c.Name}>
@@ -230,9 +229,8 @@ export class UpdateCollege extends Component {
 										)
 									})
 								}
-								</Select>
-							</div>
-						}
+							</Select>
+						</div>
 						<Button
 							style={{ alignSelf: "center", marginTop: "100px" }}
 							variant="contained"
