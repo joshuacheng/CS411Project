@@ -106,7 +106,7 @@ export class Regional extends Component {
 			loading: true
 		})
 		axios.request({
-			method: 'GET',
+			method: 'POST',
 			url,
 			baseURL: 'http://localhost:5000',
 			data: body,

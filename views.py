@@ -114,8 +114,8 @@ def updateCollege():
 		name=request.json['UniversityName']
 		state=request.json['State']
 		admissionrate=request.json['AdmissionRate']
-		instatetuition=request.json['TuitionIS']
-		outofstatetuition=request.json['TuitionOS']
+		instatetuition=float(request.json['TuitionIS'])
+		outofstatetuition=float(request.json['TuitionOS'])
 		testtype=request.json['TestType']
 		testscore=request.json['Score']
 
@@ -224,6 +224,7 @@ def matchColleges():
 			name=b[0]
 			gpa=b[1]
 			score=b[2]
+			print(b)
 			mycursor.execute("SELECT ACT FROM conversion where SAT=%s",(score,))
 			myresult = mycursor.fetchall()
 			convert=myresult[0][0]
@@ -282,9 +283,9 @@ def matchColleges():
 			safetyaffordregion=[item for item in safetyafford if item in schoolsinregion]
 			for a in reachaffordregion:
 				matches['Reach'].append(a)
-			for b in matchaffordregion:
+			for b in safetyaffordregion:
 				matches['Safety'].append(b)
-			for c in safetyaffordregion:
+			for c in matchaffordregion:
 				matches['Match'].append(c)
 	else:
 
@@ -304,7 +305,7 @@ def matchColleges():
 def mostLeastCompetitive():
 	colleges=[]
 	ans={}
-	if request.method=='GET':
+	if request.method=='POST':
 		mycursor.execute("USE project")
 		major=str(request.json['majorCategory'])
 		region=request.json['region']
