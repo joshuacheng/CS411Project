@@ -56,6 +56,7 @@ const styles = theme => ({
 const fields = [
 	['testScore', 0, 'Test Score'],
 	['gpa', 0, 'Unweighted GPA'],
+	['name', '', 'Name']
 ]
 
 const categories = [
@@ -118,7 +119,8 @@ export class AddInfo extends Component {
 			Score: this.state.testScore,
 			'Instate/OutofState': this.state.inOrOutOfState,
 			UniversityName: this.state.college,
-			Major: this.state.category
+			Major: this.state.category,
+			ApplicantName: this.state.name,
 		}
 
 		const url = `/insertApplicant`;
